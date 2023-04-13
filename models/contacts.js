@@ -50,7 +50,7 @@ const updateById = async (id, data) => {
     }
     contacts[index] = {...contacts[index], ...data};
     await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
-    return contacts[index];
+  return contacts[index];
 }
 
 module.exports = { listContacts, getContactById, removeContact, addContact,updateById };
