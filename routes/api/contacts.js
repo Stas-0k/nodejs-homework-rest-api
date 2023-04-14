@@ -1,3 +1,5 @@
+const { Contact } = require("../../models/contacts");
+
 const express = require("express");
 const Joi = require("joi");
 
@@ -21,7 +23,7 @@ const router = express.Router();
 
 router.get("/", async (req, res, next) => {
   try {
-    const result = await contacts.listContacts();
+    const result = await Contact.find();
     res.json(result);
   } catch (error) {
     next(error);
@@ -31,7 +33,7 @@ router.get("/", async (req, res, next) => {
 router.get("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.getContactById(id);
+    const result = await Contact.findById(id);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -47,7 +49,7 @@ router.post("/", async (req, res, next) => {
     if (error) {
       throw HttpError(400, error.message);
     }
-    const result = await contacts.addContact(req.body);
+    const result = await Contact.create(req.body);
     res.status(201).json(result);
   } catch (error) {
     next(error);
