@@ -19,6 +19,10 @@ const updateSchema = Joi.object({
   phone: Joi.string(),
 });
 
+const updateFavorite = Joi.object({
+  favorite: Joi.boolean(),
+})
+
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
@@ -59,7 +63,7 @@ router.post("/", async (req, res, next) => {
 router.delete("/:id", async (req, res, next) => {
   try {
     const { id } = req.params;
-    const result = await contacts.removeContact(id);
+    const result = await Contact.findByIdAndRemove(id);
     if (!result) {
       throw HttpError(404, "Not Found");
     }
@@ -78,7 +82,25 @@ router.put("/:id", async (req, res, next) => {
       throw HttpError(400, error.message);
     }
     const { id } = req.params;
-    const result = await contacts.updateById(id, req.body);
+    const result = await Contact.findByIdAndUpdate(id, req.body);
+    if (!result) {
+      throw HttpError(404, "Not found");
+    }
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.patch(":/id/favorite", async (req, res, next) => {
+  try {
+    const { error } = updateFavorite.validate(req.body);
+    console.log(req.body)
+    if (error) {
+      throw HttpError(400, error.message);
+    }
+    const { id } = req.params;
+    const result = await Contact.findByIdAndUpdate(id, req.body, {new:true});
     if (!result) {
       throw HttpError(404, "Not found");
     }
