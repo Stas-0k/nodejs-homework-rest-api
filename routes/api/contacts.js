@@ -3,7 +3,6 @@ const { Contact } = require("../../models/contacts");
 const express = require("express");
 const Joi = require("joi");
 
-const contacts = require("../../models/contacts");
 
 const { HttpError } = require("../../helpers");
 
