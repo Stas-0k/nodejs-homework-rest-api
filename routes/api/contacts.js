@@ -92,10 +92,10 @@ router.put("/:id", async (req, res, next) => {
   }
 });
 
-router.patch(":/id/favorite", async (req, res, next) => {
+router.patch("/:id/favorite", async (req, res, next) => {
   try {
     const { error } = updateFavorite.validate(req.body);
-    console.log(req.body)
+    
     if (error) {
       throw HttpError(400, error.message);
     }
