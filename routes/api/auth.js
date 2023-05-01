@@ -1,11 +1,20 @@
-const {User} = require("../../models/users")
-
 const express = require("express");
-const Joi = require("joi");
 
-const { HttpError } = require("../../helpers");
+const { validateBody, authenticate } = require("../../middlewares");
 
-const bcrypt = require("bcrypt");
-const jwt = require("jsonwebtoken");
+const { schemas } = require("../../models/users");
 
-const {SECRET_KEY} = process.env;
+const ctrl = require("../../controllers/auth");
+
+const router = express.Router();
+
+router.post("/register", validateBody(schemas.registerSchema), ctrl.register);
+
+router.post("/login", validateBody(schemas.loginSchema), ctrl.login);
+
+router.post("/logout", authenticate, ctrl.logout);
+
+router.get("/current", authenticate, ctrl.current);
+
+
+module.exports = router;
