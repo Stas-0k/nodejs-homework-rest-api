@@ -1,5 +1,7 @@
 const { Contact } = require("../../models/contacts");
 
+const { authenticate } = require("../../middlewares");
+
 const express = require("express");
 const Joi = require("joi");
 
@@ -25,6 +27,7 @@ const updateFavorite = Joi.object({
 const router = express.Router();
 
 router.get("/", async (req, res, next) => {
+  authenticate()
   try {
     const result = await Contact.find();
     res.json(result);
@@ -34,6 +37,7 @@ router.get("/", async (req, res, next) => {
 });
 
 router.get("/:id", async (req, res, next) => {
+  authenticate()
   try {
     const { id } = req.params;
     const result = await Contact.findById(id);
@@ -47,6 +51,7 @@ router.get("/:id", async (req, res, next) => {
 });
 
 router.post("/", async (req, res, next) => {
+  authenticate()
   try {
     const { error } = addSchema.validate(req.body);
     if (error) {
@@ -60,6 +65,7 @@ router.post("/", async (req, res, next) => {
 });
 
 router.delete("/:id", async (req, res, next) => {
+  authenticate()
   try {
     const { id } = req.params;
     const result = await Contact.findByIdAndRemove(id);
@@ -75,6 +81,7 @@ router.delete("/:id", async (req, res, next) => {
 });
 
 router.put("/:id", async (req, res, next) => {
+  authenticate()
   try {
     const { error } = updateSchema.validate(req.body);
     if (error) {
@@ -92,6 +99,7 @@ router.put("/:id", async (req, res, next) => {
 });
 
 router.patch("/:id/favorite", async (req, res, next) => {
+  authenticate()
   try {
     const { error } = updateFavorite.validate(req.body);
     
